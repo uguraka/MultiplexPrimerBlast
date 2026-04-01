@@ -1,7 +1,7 @@
 from typing import List, Dict
 import subprocess
 import os
-from MultiplexSpecifityChecker import PCRSpecificityChecker
+from multiplex_checker.MultiplexSpecifityChecker import PCRSpecificityChecker
 import logging
 import sys
 import pandas as pd
@@ -99,20 +99,18 @@ class BlastChecker(PCRSpecificityChecker):
         df = df[df['pident'] >= 80.0]  # todo make this a parameter
 
         parsed_results = []
-        for _, row in df.iterrows():
-            strand = row['sstrand']
-            strand = 'forward' if strand == 'plus' else 'reverse'
-            is_forward = strand == 'forward'
+        for row in df.itertuples(index=False):
+            strand = 'forward' if row.sstrand == 'plus' else 'reverse'
 
             result = {
-                'primer_name': row['qseqid'],
-                'chromosome': row['sseqid'],
-                'ref_start': int(min(row['sstart'], row['send'])),
-                'ref_end': int(max(row['sstart'], row['send'])),
-                'primer_start': int(min(row['qstart'], row['qend'])),
-                'primer_end': int(max(row['qstart'], row['qend'])),
+                'primer_name': row.qseqid,
+                'chromosome': str(row.sseqid),
+                'ref_start': int(min(row.sstart, row.send)),
+                'ref_end': int(max(row.sstart, row.send)),
+                'primer_start': int(min(row.qstart, row.qend)),
+                'primer_end': int(max(row.qstart, row.qend)),
                 'strand': strand,
-                'is_forward_strand': is_forward
+                'is_forward_strand': (strand == 'forward')
             }
             parsed_results.append(result)
 

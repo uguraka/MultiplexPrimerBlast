@@ -1,7 +1,7 @@
 from typing import List, Dict, Optional
 import subprocess
 import os
-from MultiplexSpecifityChecker import PCRSpecificityChecker
+from multiplex_checker.MultiplexSpecifityChecker import PCRSpecificityChecker
 import logging
 import sys
 
