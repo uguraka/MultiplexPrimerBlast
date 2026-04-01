@@ -320,15 +320,11 @@ class PCRSpecificityChecker(ABC):
 
     def find_amplicons(self, hits: List[PrimerHit]) -> List[Amplicon]:
         """
-        O(FxR)
-        Find potential unwanted amplicons from primer hits.
-
-        Args:
-            hits: List of primer hits
-
-        Returns:
-            List of potential amplicons
-        """
+           O(F log F + R log R) for sorting
+           O(F + R) for pairing.
+           :param hits:
+           :return:
+           """
         amplicons = []
 
         # Group hits by chromosome
@@ -344,17 +340,35 @@ class PCRSpecificityChecker(ABC):
         for chr_name, sites in chr_hits.items():
             forward_hits = [h for h in sites if h.strand == 'forward']
             reverse_hits = [h for h in sites if h.strand == 'reverse']
-            logger.info(f"Sequence: {chr_name},found {len(forward_hits)} forward bindings, {len(reverse_hits)} reverse bindings")
+
+            forward_hits.sort(key=lambda h: h.start)
+            reverse_hits.sort(key=lambda h: h.end)
+
+            logger.info(
+                f"Sequence: {chr_name},found {len(forward_hits)} forward bindings, {len(reverse_hits)} reverse bindings")
+
+            start_idx = 0  # reverse list window start
+            end_idx = 0  # reverse list window end
+            len_r = len(reverse_hits)
 
             for fwd_hit in forward_hits:
-                for rev_hit in reverse_hits:
-                    # Check if forward primer comes before reverse primer
+                # get the window
+                min_pos = fwd_hit.start + self.min_amplicon_size
+                max_pos = fwd_hit.start + self.max_amplicon_size
+                while start_idx < len_r and reverse_hits[start_idx].end < min_pos:
+                    start_idx += 1
+
+                while end_idx < len_r and reverse_hits[end_idx].end <= max_pos:
+                    end_idx += 1
+
+                for rev_hit in reverse_hits[start_idx:end_idx]:
+                    # Double check size constraints (not necessary)
                     if not fwd_hit.start < rev_hit.end:
                         continue
 
                     amplicon_size = rev_hit.end - fwd_hit.start
 
-                    # Check size constraints
+                    # Double check size constraints (not necessary)
                     if self.min_amplicon_size <= amplicon_size <= self.max_amplicon_size:
                         amplicon = Amplicon(
                             chromosome=chr_name,
@@ -368,8 +382,9 @@ class PCRSpecificityChecker(ABC):
                         )
                         amplicons.append(amplicon)
             logger.info(f"Done: Found {len(amplicons)} amplicons in {chr_name}")
-        # Sort by size (smaller amplicons are more likely to be problematic)
-        # amplicons.sort(key=lambda x: x.size)
+
+            # Sort by size
+            # amplicons.sort(key=lambda x: x.size)
 
         logger.info(f"Found {len(amplicons)} potential unwanted amplicons")
         return amplicons
