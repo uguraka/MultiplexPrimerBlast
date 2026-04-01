@@ -2,7 +2,7 @@
 
 ## Overview
 
-Designing primers for multiplex PCR—where multiple primer pairs amplify several target sequences simultaneously in a single reaction tube—is a complex challenge. While tools exist to design highly specific single primer pairs, combining multiple pairs drastically increases the risk of **cross-reactivity** against the reference genome. 
+Designing primers for multiplex PCR is a complex challenge. While tools exist (like Primer3 or NCBI Primer-BLAST) to design highly specific single primer pairs, combining multiple pairs drastically increases the risk of **cross-reactivity** against the reference genome. 
 
 When multiplexing, a forward primer from one pair might inadvertently interact with a reverse primer from an entirely different pair, forming **unwanted amplicons**. These unintended products consume PCR reagents, reduce amplification efficiency, and can produce spurious bands or false positives.
 
