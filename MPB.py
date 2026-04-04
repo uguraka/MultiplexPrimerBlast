@@ -17,12 +17,19 @@ def main():
     args = parser.parse_args()
 
     if args.tool == "blast":
+        import shutil
+        if not shutil.which("blastn"):
+            raise RuntimeError("BLAST is not installed or not in PATH. Please install it via conda or NCBI.")
+
         checker = BlastChecker(
             tm_threshold=args.tm_threshold,
             max_amplicon_size=args.max_amplicon,
             min_amplicon_size=args.min_amplicon,
         )
     elif args.tool == "mummer":
+        import shutil
+        if not shutil.which("nucmer"):
+            raise RuntimeError("Mummer is not installed or not in PATH. Please install it via conda or NCBI.")
         checker = MummerChecker(
             tm_threshold=args.tm_threshold,
             max_amplicon_size=args.max_amplicon,
