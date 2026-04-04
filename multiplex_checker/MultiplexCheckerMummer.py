@@ -153,37 +153,3 @@ class MummerChecker(PCRSpecificityChecker):
         except Exception as e:
             logger.error(f"Error running MUMmer: {e}")
             return False
-
-
-
-def main():
-    """Main function for command line usage."""
-    # Configuration
-    # ref_fasta = "hg38_primary.fa"
-    ref_fasta = "hg38_primary.fa"
-    # primer_fasta = "str_primers.txt"
-    # primer_fasta = "dys437.fasta"
-    primer_fasta = "dys437.fasta"
-    prefix = '2025-08-11_dys437_results_mummer'
-    run_alignment = True  # Set to True to run alignment, False to use existing delta file
-
-    # Initialize checker with custom parameters
-    checker = MummerChecker(
-        tm_threshold=40.0,
-        max_amplicon_size=650,
-        min_amplicon_size=50,
-        region_padding=50
-    )
-
-    # Run analysis
-    success = checker.analyze_specificity(ref_fasta, primer_fasta, prefix, run_alignment)
-
-    if success:
-        logger.info("Analysis completed successfully")
-    else:
-        logger.error("Analysis failed")
-        sys.exit(1)
-
-
-if __name__ == '__main__':
-    main()
