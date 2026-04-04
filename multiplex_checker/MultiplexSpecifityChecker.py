@@ -390,7 +390,7 @@ class PCRSpecificityChecker(ABC):
         return amplicons
 
 
-    def write_amplicons_to_csv(self, amplicons: List[Amplicon], filename: str = 'unwanted_amplicon_results_20_06_25.csv'):
+    def write_amplicons_to_csv(self, amplicons: List[Amplicon], filename: str = 'amplicon_results.csv'):
         """Write amplicons to CSV file with detailed information."""
         try:
             with open(filename, mode='w', newline='') as file:
