@@ -306,16 +306,10 @@ class PCRSpecificityChecker(ABC):
         """
 
         # Parse the delta file to get raw alignments
-        st = time.time()
         alignments = self.parse_alignment_results(prefix)
-        end = time.time()
-        print('parsing:',end-st)
 
         # Calculate thermodynamics and filter by Tm threshold
-        st = time.time()
         hits = self.calculate_primer_thermodynamics(alignments, ref_fasta, primer_fasta)
-        end = time.time()
-        print('thermodynamic calculations:', end - st)
         return hits
 
     def find_amplicons(self, hits: List[PrimerHit]) -> List[Amplicon]:
