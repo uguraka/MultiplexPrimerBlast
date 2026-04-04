@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class BlastChecker(PCRSpecificityChecker):
     def __init__(self, tm_threshold=30.0, max_amplicon_size=650, min_amplicon_size=50, region_padding=50):
         super().__init__(tm_threshold=tm_threshold, max_amplicon_size=max_amplicon_size, min_amplicon_size=min_amplicon_size, region_padding=region_padding)
-        self.num_threads = 25
+        self.num_threads = 4
         self.word_size = 12
 
 
@@ -116,45 +116,3 @@ class BlastChecker(PCRSpecificityChecker):
 
         logger.info(f"Parsed {len(parsed_results)} alignments from {prefix}")
         return parsed_results
-
-
-def main(primer_fasta):
-    """Main function for command line usage."""
-    # Configuration
-    # ref_fasta = "hg38_primary.fa"
-    ref_fasta = "/home/burakdemiralay/MultiplexSpecifity/hg38_primary.fa"
-    # primer_fasta = "str_primers.txt"
-    # primer_fasta = "dys437.fasta"
-    # primer_fasta = "/home/burakdemiralay/MultiplexSpecifity/str_primers.txt"
-    prefix = '2025-12-09_trisomy_results_blast' ##prefix = '2025-08-11_dys437_results_blast'
-    run_alignment = True  # Set to True to run alignment, False to use existing delta file wowzie #todo
-
-    # Initialize checker with custom parameters
-    checker = BlastChecker(
-        tm_threshold=40.0,
-        max_amplicon_size=650,
-        min_amplicon_size=50,
-        region_padding=50
-    )
-    # Run analysis
-    success = checker.analyze_specificity(ref_fasta, primer_fasta, prefix, run_alignment)
-    if success:
-        logger.info("Analysis completed successfully")
-    else:
-        logger.error("Analysis failed")
-        sys.exit(1)
-
-
-
-
-
-if __name__ == '__main__':
-
-    primer_fasta = "/home/burakdemiralay/MultiplexSpeci fity/2025-12-09_trisomy_primer_probe_mchecker.fasta" #primer_fasta = "/home/burakdemiralay/MultiplexSpecifity/dys437.fasta"
-
-    main(primer_fasta)
-
-
-
-
-

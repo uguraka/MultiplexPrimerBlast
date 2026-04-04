@@ -366,7 +366,7 @@ class PCRSpecificityChecker(ABC):
                     if not fwd_hit.start < rev_hit.end:
                         continue
 
-                    amplicon_size = rev_hit.end - fwd_hit.start
+                    amplicon_size = rev_hit.end - fwd_hit.start + 1
 
                     # Double check size constraints (not necessary)
                     if self.min_amplicon_size <= amplicon_size <= self.max_amplicon_size:
