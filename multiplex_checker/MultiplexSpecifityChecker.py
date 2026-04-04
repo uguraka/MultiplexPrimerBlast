@@ -225,6 +225,7 @@ class PCRSpecificityChecker(ABC):
         Returns:
             List of PrimerHit objects representing valid primer binding sites
         """
+        # todo multiprocessing could work here
 
         # Load primer sequences
         if primer_fasta not in self.primer_cache:
