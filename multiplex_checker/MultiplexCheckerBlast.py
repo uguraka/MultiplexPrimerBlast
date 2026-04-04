@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 class BlastChecker(PCRSpecificityChecker):
     def __init__(self, tm_threshold=30.0, max_amplicon_size=650, min_amplicon_size=50, region_padding=50):
         super().__init__(tm_threshold=tm_threshold, max_amplicon_size=max_amplicon_size, min_amplicon_size=min_amplicon_size, region_padding=region_padding)
-        self.num_threads = 4
-        self.word_size = 12
+        self.num_threads = 4 #todo parameterize
+        self.word_size = 10
 
 
     def _db_files_exist(self, db_prefix: str) -> bool:
