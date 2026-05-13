@@ -2,13 +2,17 @@
 
 ## Overview
 
-Designing primers for multiplex PCR is a complex challenge. While tools exist (like Primer3 or NCBI Primer-BLAST) to design highly specific single primer pairs, combining multiple pairs drastically increases the risk of **cross-reactivity** against the reference genome. 
+### The Gap in Existing Tools
 
-When multiplexing, a forward primer from one pair might inadvertently interact with a reverse primer from an entirely different pair, forming **unwanted amplicons**. These unintended products consume PCR reagents, reduce amplification efficiency, and can produce spurious bands or false positives.
+Tools like Primer3 and NCBI Primer-BLAST are excellent at designing specific primer pairs — but they are built around a single pair at a time. When you combine multiple pairs into a multiplex reaction, these tools have no concept of the pool as a whole. A forward primer from one pair is never checked against the reverse primers of all other pairs. This is not a flaw — it is simply outside their scope.
 
-**Multiplex Primer Blast (MPB)** provides a command-line pipeline for analyzing the specificity of multiplex PCR primers against a full reference genome. It identifies potential unwanted amplicons by simulating the binding of an entire pool of primers and calculating the true thermodynamic melting temperature (Tm) of potential off-target binding sites. 
+### Why This Matters at Scale
 
-By exhaustively pairing valid forward and reverse binding sites within expected size constraints, MPB rapidly identifies unwanted amplicons that could ruin your multiplex reaction, allowing you to filter out problematic primers *before* ordering them.
+In a multiplex reaction, every primer can potentially interact with every other primer in the pool. With 10 primer pairs (20 primers), there are **190 possible cross-pair combinations**. With 20 pairs, that number rises to **780**. No one reviews these manually, and no standard tool checks them automatically. The result: primers that each pass specificity checks individually can still produce unexpected bands, consume reagents, reduce sensitivity, or — in diagnostic settings — generate false positives. These problems only surface in the lab, after the primers are ordered and the reaction is running.
+
+### What MPB Does
+
+**Multiplex Primer Blast (MPB)** fills this gap. Given a reference genome and a pool of primers, it exhaustively checks every cross-pair combination by aligning all primers simultaneously and simulating their thermodynamic binding. It filters out weak off-target interactions using accurate Tm calculations, then reports every potential unwanted amplicon — before you order a single primer.
 
 ### Key Features
 * **Dual Alignment Backends:** Supports both NCBI BLAST+ (`blastn-short`) and MUMmer (`nucmer`) for rapid genomic alignment.
@@ -22,8 +26,8 @@ By exhaustively pairing valid forward and reverse binding sites within expected 
 - **Python 3.8+**
 - **primer3-py**: For thermodynamic calculations.
 - **pandas**: For parsing and analyzing alignment results.
-- **BLAST+**: (Default) Requires NCBI BLAST+ (`makeblastdb` and `blastn`) installed and in your system PATH.
-- **MUMmer**: (Optional) Requires MUMmer4 (`nucmer`) installed and in your system PATH.
+- **BLAST+**: (Recommended) Requires NCBI BLAST+ (`makeblastdb` and `blastn`) installed and in your system PATH.
+- **MUMmer**: (Alternative) Requires MUMmer4 (`nucmer`) installed and in your system PATH.
 
 ### Installation
 ```bash
@@ -55,7 +59,7 @@ git clone https://github.com/uguraka/MultiplexPrimerBlast.git
 cd MultiplexPrimerBlast
 
 # Create and activate the conda environment
-conda create -n mpb_env -c bioconda python pandas primer3-py blast
+conda create -n mpb_env -c bioconda python pandas primer3-py blast mummer
 conda activate mpb_env
 ```
 
@@ -76,7 +80,7 @@ python MPB.py --ref <path_to_reference.fasta> --primers <path_to_primers.fasta> 
 - `--primers`: Path to the multiplex primer FASTA file.
 
 #### Optional Arguments
-- `--tool`: Alignment tool to use (`blast` or `mummer`). Default is `blast`.
+- `--tool`: Alignment tool to use (`blast` or `mummer`). Default is `blast` (recommended).
 - `--prefix`: Prefix for the output files. Default is `primer_alignment`.
 - `--tm-threshold`: Minimum melting temperature (Tm) in °C for a binding site to be considered valid. Default is `30.0`.
 - `--max-amplicon`: Maximum expected off-target amplicon size (in base pairs). Default is `1000`.
