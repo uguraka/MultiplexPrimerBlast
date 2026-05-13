@@ -16,7 +16,7 @@ class MummerChecker(PCRSpecificityChecker):
         super().__init__(tm_threshold=tm_threshold, max_amplicon_size=max_amplicon_size, min_amplicon_size=min_amplicon_size, region_padding=region_padding)
         self._l = 14 # minimum match length
         self._c = 6  # minimum_match length
-        self.num_threads = 25
+        self.num_threads = 4
 
     def parse_alignment_results(self, prefix: str) -> List[Dict]:
         """
