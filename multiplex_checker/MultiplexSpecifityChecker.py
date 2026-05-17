@@ -347,9 +347,11 @@ class PCRSpecificityChecker(ABC):
             len_r = len(reverse_hits)
 
             for fwd_hit in forward_hits:
-                # get the window
-                min_pos = fwd_hit.start + self.min_amplicon_size
-                max_pos = fwd_hit.start + self.max_amplicon_size
+                # Window bounds for rev.end. Size formula is rev.end - fwd.start + 1,
+                # so the inclusive [min_size, max_size] size range maps to rev.end in
+                # [fwd.start + min_size - 1, fwd.start + max_size - 1].
+                min_pos = fwd_hit.start + self.min_amplicon_size - 1
+                max_pos = fwd_hit.start + self.max_amplicon_size - 1
                 while start_idx < len_r and reverse_hits[start_idx].end < min_pos:
                     start_idx += 1
 
