@@ -65,8 +65,8 @@ You only need the backend you plan to use; install both if you want to switch wi
 **2. Install MPB and its Python dependencies.**
 
 ```bash
-git clone https://github.com/uguraka/MultiplexPrimerBlast.git
-cd MultiplexPrimerBlast
+git clone https://github.com/uguraka/multiplex-primer-blast.git
+cd multiplex-primer-blast
 
 python -m venv mpb_env
 source mpb_env/bin/activate   # on Windows: mpb_env\Scripts\activate
@@ -86,8 +86,8 @@ nucmer --version
 Installs MPB and all alignment binaries into a single environment.
 
 ```bash
-git clone https://github.com/uguraka/MultiplexPrimerBlast.git
-cd MultiplexPrimerBlast
+git clone https://github.com/uguraka/multiplex-primer-blast.git
+cd multiplex-primer-blast
 
 conda create -n mpb_env -c bioconda python pandas primer3-py blast mummer
 conda activate mpb_env
