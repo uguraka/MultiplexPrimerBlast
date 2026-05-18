@@ -1,0 +1,31 @@
+site_name: Multiplex Primer Blast
+site_url: https://uguraka.github.io/multiplex-primer-blast
+site_description: Validate PCR primer pools by detecting unintended cross-reactivity amplicons
+repo_url: https://github.com/uguraka/multiplex-primer-blast
+repo_name: uguraka/multiplex-primer-blast
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - How It Works: how-it-works.md
